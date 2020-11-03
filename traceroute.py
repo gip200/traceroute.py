@@ -5,6 +5,7 @@ import struct
 import time
 import select
 import binascii
+import socket
 
 ICMP_ECHO_REQUEST = 8
 MAX_HOPS = 30
@@ -53,6 +54,7 @@ def build_packet():
 
     # So the function ending should look like this
     myChecksum = 0
+    ID = os.getpid() & 0xFFFF  # Return the current process i
     # Make a dummy header with a 0 checksum
     # struct -- Interpret strings as packed binary data
     header = struct.pack("bbHHh", ICMP_ECHO_REQUEST, 0, myChecksum, ID, 1)
@@ -79,8 +81,10 @@ def get_route(hostname):
     tracelist2 = []  # This is your list to contain all traces
 
     for ttl in range(1, MAX_HOPS):
+        tracelist1.clear()
+        tracelist1.append(str(ttl))
         for tries in range(TRIES):
-            destAddr = gethostbyname(hostname)
+
 
             # Fill in start
             icmp = socket.getprotobyname("icmp")
@@ -99,18 +103,23 @@ def get_route(hostname):
                 whatReady = select.select([mySocket], [], [], timeLeft)
                 howLongInSelect = (time.time() - startedSelect)
                 if whatReady[0] == []:  # Timeout
+                    tracelist1.append('*')
                     tracelist1.append("* * * Request timed out.")
+                    print(tracelist1)
                     # Fill in start
-                    tracelist2.append("* * * Request timed out.")
                     # You should add the list above to your all traces list
+                    concatList1 = tracelist1[:]
+                    tracelist2.append([concatList1])
                     # Fill in end
                 recvPacket, addr = mySocket.recvfrom(1024)
                 timeReceived = time.time()
                 timeLeft = timeLeft - howLongInSelect
                 if timeLeft <= 0:
+                    tracelist1.append('*')
                     tracelist1.append("* * * Request timed out.")
                     # Fill in start
-                    tracelist2.append("* * * Request timed out.")
+                    concatList1 = tracelist1[:]
+                    tracelist2.append([concatList1])
                     # You should add the list above to your all traces list
                     # Fill in end
             except timeout:
@@ -123,8 +132,12 @@ def get_route(hostname):
                 # Fill in end
                 try:  # try to fetch the hostname
                 # Fill in start
-                host = socket.gethostbyaddr("ip")
-                # Fill in end
+                    a = str(recvPacket[12])
+                    b = str(recvPacket[13])
+                    c = str(recvPacket[14])
+                    d = str(recvPacket[15])
+                    hopIP = a + '.' + b + '.' + c + '.' + d
+                    hopHostname = gethostbyaddr(hopIP)[0]
                 except herror:  # if the host does not provide a hostname
                 # Fill in start
                     print("Hostname not returnable.")
@@ -132,8 +145,7 @@ def get_route(hostname):
 
                 if types == 11:
                     bytes = struct.calcsize("d")
-                    timeSent = struct.unpack("d", recvPacket[28:28 +
-                                                                bytes])[0]
+                    timeSent = struct.unpack("d", recvPacket[28:28 + bytes])[0]
                     # Fill in start
                     # You should add your responses to your lists here
                     print (" %d   rtt=%.0f ms %s" % (ttl,(timeReceived -t)*1000, addr[0]))
@@ -155,7 +167,7 @@ def get_route(hostname):
                 else:
                 # Fill in start
                 # If there is an exception/error to your if statements, you should append that to your list here
-                print("error")
+                    print("error")
                 # Fill in end
                 break
             finally:
