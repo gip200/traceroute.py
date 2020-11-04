@@ -114,7 +114,7 @@ def get_route(hostname):
                     # Fill in start
                     # You should add the list above to your all traces list
                     concatList1 = tracelist1[:]
-                    tracelist2.append([concatList1])
+                    tracelist2.append(concatList1)
                     # Fill in end
                 recvPacket, addr = mySocket.recvfrom(1024)
                 timeReceived = time.time()
