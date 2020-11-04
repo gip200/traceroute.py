@@ -215,8 +215,6 @@ def get_route(hostname):
             finally:
                 mySocket.close()
 
-    print("Unable to reach destination within " + str(MAX_HOPS) + " hops.")
-    print("")
-    print(tracelist2)
-    return tracelist2
 
+if __name__ == '__main__':
+    get_route("yahoo.com")
