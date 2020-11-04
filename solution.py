@@ -121,8 +121,8 @@ def get_route(hostname):
                 timeLeft = timeLeft - howLongInSelect
                 if timeLeft <= 0:
                     tracelist1.append('*')
-                    tracelist1.append("Request ")
-                    print(tracelist1)timed out
+                    tracelist1.append("Request timed out")
+                    print(tracelist1)
                     # Fill in start
                     concatList1 = tracelist1[:]
                     tracelist2.append([concatList1])
