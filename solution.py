@@ -109,7 +109,7 @@ def get_route(hostname):
                 howLongInSelect = (time.time() - startedSelect)
                 if whatReady[0] == []:  # Timeout
                     tracelist1.append('*')
-                    tracelist1.append("* * * Request timed out.")
+                    tracelist1.append("Request timed out")
                     print(tracelist1)
                     # Fill in start
                     # You should add the list above to your all traces list
@@ -121,8 +121,8 @@ def get_route(hostname):
                 timeLeft = timeLeft - howLongInSelect
                 if timeLeft <= 0:
                     tracelist1.append('*')
-                    tracelist1.append("* * * Request timed out.")
-                    print(tracelist1)
+                    tracelist1.append("Request ")
+                    print(tracelist1)timed out
                     # Fill in start
                     concatList1 = tracelist1[:]
                     tracelist2.append([concatList1])
@@ -215,6 +215,10 @@ def get_route(hostname):
             finally:
                 mySocket.close()
 
+    #print("Unable to reach destination within " + str(MAX_HOPS) + " hops.")
+    #print("")
+    #print(tracelist2)
+    #return tracelist2
 
 if __name__ == '__main__':
     get_route("yahoo.com")
