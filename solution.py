@@ -196,7 +196,6 @@ def get_route(hostname):
                         print("")
                         print(tracelist2)
                         return tracelist2
-                    print (" %d   rtt=%.0f ms %s" % (ttl,(timeReceived -timeSent)*1000, addr[0]))
                     # Fill in end
                 else:
                     #Fill in start
