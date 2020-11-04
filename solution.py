@@ -85,7 +85,7 @@ def get_route(hostname):
     tracelist1 = []  # This is your list to use when iterating through each trace
     tracelist2 = []  # This is your list to contain all traces
 
-    for ttl in range(1, MAX_HOPS):
+    for ttl in range(1,MAX_HOPS):
         tracelist1.clear()
         tracelist1.append(str(ttl))
         for tries in range(TRIES):
@@ -103,11 +103,11 @@ def get_route(hostname):
             try:
                 d = build_packet()
                 mySocket.sendto(d, (hostname, 0))
-                t = time.time()
+                t= time.time()
                 startedSelect = time.time()
                 whatReady = select.select([mySocket], [], [], timeLeft)
                 howLongInSelect = (time.time() - startedSelect)
-                if whatReady[0] == []:  # Timeout
+                if whatReady[0] == []: # Timeout
                     tracelist1.append('*')
                     tracelist1.append("Request timed out")
                     print(tracelist1)
